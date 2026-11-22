@@ -19,7 +19,7 @@ function listRooms(){const now=Date.now(),out=[];
   const seated=new Set(Object.values(R.claims).map(c=>c.uid));if(![...R.subs].some(w=>seated.has(w.uid)))continue;
   if(r.status==='play'&&now-R.ts>20*60e3)continue;
   const seats=(r.seats||[]).map(x=>String(x&&x.id||'')).slice(0,8);const open=(r.status==='lobby'?seats.map((x,i)=>i):(Array.isArray(r.open)?r.open:[])).filter(i=>!R.claims[i]);if(!open.length)continue;
-  out.push({code,host:String(r.hostName||'').slice(0,16),seats,open,humans:Object.keys(R.claims).length,status:r.status,round:+r.round||1,diff:+r.diff||1})}
+  out.push({code,map:String(r.map||'eurasia').slice(0,12),host:String(r.hostName||'').slice(0,16),seats,open,humans:Object.keys(R.claims).length,status:r.status,round:+r.round||1,diff:+r.diff||1})}
  out.sort((a,b)=>(a.status==='lobby'?0:1)-(b.status==='lobby'?0:1)||b.humans-a.humans);return out.slice(0,30)}
 const srv=http.createServer((q,r)=>{r.writeHead(200,{'content-type':'text/plain; charset=utf-8','access-control-allow-origin':'*'});r.end('Battle for Eurasia server: '+rooms.size+' rooms')});
 const wss=new WebSocketServer({server:srv,maxPayload:700*1024});
